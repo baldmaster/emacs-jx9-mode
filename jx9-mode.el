@@ -56,8 +56,14 @@
      "return"
      "goto") t))
 
+(defconst jx9-identifier-re
+  "[^[:digit:]][\\([:alnum:]|_\\)]*")
+
 (defconst jx9-variable-re
-  "\\($[^[:digit:]][\\([:alnum:]|_\\)]*\\)")
+  (concat
+   "\\($"
+   jx9-identifier-re
+   "\\)"))
 
 (defconst jx9-for-variable-re
   (concat
@@ -70,11 +76,21 @@
    jx9-variable-re
    "\\s-*="))
 
+(defconst jx9-nowdoc-start-re
+  (concat
+   "\\s-?<<<\\("
+   jx9-identifier-re
+   "\\)\\s-*\n"))
+
+(defconst jx9-nowdoc-re
+  (concat
+   jx9-nowdoc-start-re "\\(.\\|\n\\)*?\n\\1"))
 
 (setq jx9-font-lock-keywords
       `((,jx9-keywords-re . font-lock-keyword-face)
-        (,jx9-variable-assignment .  font-lock-variable-name-face)
-        (,jx9-for-variable-re  (1 font-lock-variable-name-face))))
+        (,jx9-variable-assignment (2 font-lock-variable-name-face))
+        (,jx9-for-variable-re  (1 font-lock-variable-name-face))
+        (,jx9-nowdoc-re . font-lock-keyword-face)))
 
 
 (defvar jx9-mode-syntax-table
@@ -89,6 +105,7 @@
   "Major mode for editing Jx9"
   (interactive)
   (kill-all-local-variables)
+  (setq-local font-lock-multiline t)
   (set-syntax-table jx9-mode-syntax-table)
   (set (make-local-variable 'font-lock-defaults) '(jx9-font-lock-keywords))
   (setq major-mode 'jx9-mode)
