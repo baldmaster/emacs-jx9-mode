@@ -20,6 +20,18 @@
 ;;
 ;;; Code:
 
+
+;; Custom faces
+
+
+(defface jx9-nowdoc-face
+  '((t :foreground "medium orchid"
+       :weight bold
+       ))
+  "Face for nowdoc strings."
+  :group 'jx9-mode )
+
+;; Regexps
 (defconst jx9-keywords-re
   (regexp-opt
    '("break"
@@ -87,7 +99,7 @@
    jx9-nowdoc-start-re "\\(.\\|\n\\)*?\n\\1;"))
 
 (setq jx9-font-lock-keywords
-      `((,jx9-nowdoc-re . font-lock-keyword-face)
+      `((,jx9-nowdoc-re . 'jx9-nowdoc-face)
         (,jx9-keywords-re . font-lock-keyword-face)
         (,jx9-variable-assignment (2 font-lock-variable-name-face))
         (,jx9-for-variable-re  (1 font-lock-variable-name-face))))
