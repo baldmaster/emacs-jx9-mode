@@ -84,14 +84,13 @@
 
 (defconst jx9-nowdoc-re
   (concat
-   jx9-nowdoc-start-re "\\(.\\|\n\\)*?\n\\1"))
+   jx9-nowdoc-start-re "\\(.\\|\n\\)*?\n\\1;"))
 
 (setq jx9-font-lock-keywords
-      `((,jx9-keywords-re . font-lock-keyword-face)
+      `((,jx9-nowdoc-re . font-lock-keyword-face)
+        (,jx9-keywords-re . font-lock-keyword-face)
         (,jx9-variable-assignment (2 font-lock-variable-name-face))
-        (,jx9-for-variable-re  (1 font-lock-variable-name-face))
-        (,jx9-nowdoc-re . font-lock-keyword-face)))
-
+        (,jx9-for-variable-re  (1 font-lock-variable-name-face))))
 
 (defvar jx9-mode-syntax-table
   (let ((table (make-syntax-table)))
@@ -101,6 +100,19 @@
     (modify-syntax-entry ?\n "> b" table)
     table))
 
+(defun jx9-font-lock-extend-region ()
+  "Extend the search region to include an entire block of text."
+  ;; TODO: improve efficiency.
+  (eval-when-compile (defvar font-lock-beg) (defvar font-lock-end))
+  (save-excursion
+    (goto-char font-lock-beg)
+    (let ((found (or (re-search-backward "\n\n" nil t) (point-min))))
+      (goto-char font-lock-end)
+      (when (re-search-forward "\n\n" nil t)
+        (beginning-of-line)
+        (setq font-lock-end (point)))
+      (setq font-lock-beg found))))
+
 (defun jx9-mode ()
   "Major mode for editing Jx9"
   (interactive)
@@ -108,6 +120,7 @@
   (setq-local font-lock-multiline t)
   (set-syntax-table jx9-mode-syntax-table)
   (set (make-local-variable 'font-lock-defaults) '(jx9-font-lock-keywords))
+  (add-hook 'font-lock-extend-region-functions 'jx9-font-lock-extend-region)
   (setq major-mode 'jx9-mode)
   (setq mode-name "Jx9"))
 
