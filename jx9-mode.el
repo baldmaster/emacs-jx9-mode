@@ -269,7 +269,7 @@
   (setq mode-name "Jx9"))
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist '(".\\jx9$'" . jx9-mode))
+(add-to-list 'auto-mode-alist '(".\\jx9$" . jx9-mode))
 
 (provide 'jx9-mode)
 ;;; jx9-mode.el ends here
