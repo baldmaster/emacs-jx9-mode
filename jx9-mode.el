@@ -48,6 +48,11 @@
   "Face for nowdoc strings."
   :group 'jx9-mode )
 
+(defface jx9-exponential-face
+  '((t :foreground "yellow"))
+  "Face for nowdoc strings."
+  :group 'jx9-mode )
+
 ;; Regexps
 (defconst jx9-keywords-re
   (regexp-opt
@@ -191,6 +196,9 @@
    jx9-identifier-re
    "\\)\\s-*(.*)"))
 
+(defconst jx9-exponential-re
+ "\\s-+\\([[:digit:]]*\\.?[[:digit:]]*[eE]\\{1\\}-?[[:digit:]]+\\)\\(\\s-\\|;\\)")
+
 ;; Font lock keywords
 (setq jx9-font-lock-keywords
       `((,jx9-nowdoc-re . 'jx9-nowdoc-face)
@@ -199,7 +207,8 @@
         (,jx9-function-declaration-re (1 font-lock-string-face))
         (,jx9-function-call-re (1 'jx9-function-call-face))
         (,jx9-variable-assignment (2 font-lock-variable-name-face))
-        (,jx9-for-variable-re  (1 font-lock-variable-name-face))))
+        (,jx9-for-variable-re  (1 font-lock-variable-name-face))
+        (,jx9-exponential-re (1 'jx9-exponential-face))))
 
 ;; Syntax table
 (defvar jx9-mode-syntax-table
