@@ -264,10 +264,10 @@
 		(indent-line-to 0)))))
 
 ;; Mode
-(defun jx9-mode ()
+(define-derived-mode jx9-mode c-mode "Jx9"
   "Major mode for editing Jx9"
   (interactive)
-  (kill-all-local-variables)
+  ;;(kill-all-local-variables)
   (setq-local font-lock-multiline t)
   (set-syntax-table jx9-mode-syntax-table)
   (use-local-map jx9-mode-map)
