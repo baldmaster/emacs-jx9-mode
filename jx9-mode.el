@@ -197,7 +197,7 @@
    "\\)\\s-*(.*)"))
 
 (defconst jx9-exponential-re
- "\\s-+\\([[:digit:]]*\\.?[[:digit:]]*[eE]\\{1\\}-?[[:digit:]]+\\)\\(\\s-\\|;\\)")
+  "\\s-+\\([[:digit:]]*\\.?[[:digit:]]*[eE]\\{1\\}-?[[:digit:]]+\\)\\(\\s-\\|;\\)")
 
 ;; Font lock keywords
 (setq jx9-font-lock-keywords
@@ -238,38 +238,38 @@
   (beginning-of-line)
   (if (bobp)
 	  (indent-line-to 0)
-	(let ((not-indented t) cur-indent)
-	  (if (looking-at "^[ \t]*}")
-		  (progn
-			(save-excursion
-			  (forward-line -1)
-			  (setq cur-indent (- (current-indentation) jx9-tab-width)))
-			(if (< cur-indent 0)
-				(setq cur-indent 0)))
-		(save-excursion
-		  (while not-indented
-			(forward-line -1)
-			(if (looking-at "^[ \t]*}")
-				(progn
-				  (setq cur-indent (current-indentation))
-				  (setq not-indented nil))
-			  (if (looking-at ".*[ \t]*{")
-				  (progn
-					(setq cur-indent (+ (current-indentation) jx9-tab-width))
-					(setq not-indented nil))
-				(if (bobp)
-					(setq not-indented nil)))))))
-	  (if cur-indent
-		  (indent-line-to cur-indent)
-		(indent-line-to 0)))))
+    (if (looking-at ".*[()]$")
+        (end-of-line)
+      (let ((not-indented t) cur-indent)
+        (if (looking-at "^[ \t]*}")
+            (progn
+              (save-excursion
+                (forward-line -1)
+                (setq cur-indent (- (current-indentation) jx9-tab-width)))
+              (if (< cur-indent 0)
+                  (setq cur-indent 0)))
+          (save-excursion
+            (while not-indented
+              (forward-line -1)
+              (if (looking-at "^[ \t]*}")
+                  (progn
+                    (setq cur-indent (current-indentation))
+                    (setq not-indented nil))
+                (if (looking-at ".*[ \t]*{")
+                    (progn
+                      (setq cur-indent (+ (current-indentation) jx9-tab-width))
+                      (setq not-indented nil))
+                  (if (bobp)
+                      (setq not-indented nil)))))))
+        (if cur-indent
+            (indent-line-to cur-indent)
+          (indent-line-to 0))))))
 
 ;; Mode
 (define-derived-mode jx9-mode c-mode "Jx9"
   "Major mode for editing Jx9"
-  (interactive)
-  ;;(kill-all-local-variables)
   (setq-local font-lock-multiline t)
-  (set-syntax-table jx9-mode-syntax-table)
+  ;; (set-syntax-table jx9-mode-syntax-table)
   (use-local-map jx9-mode-map)
   (set (make-local-variable 'indent-line-function) 'jx9-indent-line)
   (set (make-local-variable 'font-lock-defaults) '(jx9-font-lock-keywords))
