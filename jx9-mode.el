@@ -32,7 +32,7 @@
   (let ((map (make-keymap)))
     (define-key map "\C-j" 'newline-and-indent)
     map)
-  "Keymap for Jx9 major mode")
+  "Keymap for Jx9 major mode.")
 
 ;; Custom faces
 
